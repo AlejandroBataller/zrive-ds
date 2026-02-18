@@ -33,6 +33,27 @@ def get_data_meteo_api(city_name):
     else:
         print(f"Error en {city_name}: {r.status_code}")
         return None
+def process_meteo_data(raw_data, city_name):
+    # Extraemos la parte daily que es la que tiene los datos climaticos
+    daily_data = raw_data["daily"]
+    # Creamos el DataFrame de Pandas
+    df=pd.DataFrame(daily_data)
+    # Convertimos la columna time a formato fecha real
+    df["time"] = pd.to_datetime(df["time"])
+    #Añadir una columna con el nombre de la ciudad
+    df["city"] = city_name
+
+    return df
+def resample_to_monthly(df):
+    # Ponemos la fecha como índice para poder agrupar el tiempo
+    df=df.set_index("time")
+
+    # Agrupamos por mes y calculamos la media
+    # 'numeric_only=True' asegura que no intenta hacer medias de la columna city
+    monthly_df = dfresample("mes").mean(numeric_only=True)
+
+    return monthly_df
+
 def main():
     # Probamos con Madrid
     print("--- Probando descarga de Madrid ---")
