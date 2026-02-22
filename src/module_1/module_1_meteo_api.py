@@ -65,46 +65,53 @@ def resample_to_monthly(df):
 
 def plot_meteo_data(dfs_dict):
     """
-        Recibe un diccionario con los DataFrames de cada ciudad y genera gráficos.
+    Recibe un diccionario con los DataFrames de cada ciudad y genera gráficos.
     """
     fig, axes = plt.subplots(3, 1, figsize=(12, 15), sharex=True)
-    
+
     variables = ["temperature_2m_mean", "precipitation_sum", "wind_speed_10m_max"]
-    titles = ["Temperatura Media (ºC)", "Precipitación Total (mm)", "Velocidad Máxima Viento (km/h)"]
+    titles = [
+        "Temperatura Media (ºC)",
+        "Precipitación Total (mm)",
+        "Velocidad Máxima Viento (km/h)",
+    ]
 
     for i, var in enumerate(variables):
         for city, df in dfs_dict.items():
             axes[i].plot(df.index, df[var], label=city)
-        axes[i].set_title(titles[i]) # pone el nombre que le correspone a cada panel
-        axes[i].legend() # Muestra el cuadradito donde pone el color y la ciudad a la que corresponde (gracias al label = city)
-        axes[i].grid(True) # Muestra la cuadrícula de fondo
+        axes[i].set_title(titles[i])  # pone el nombre que le correspone a cada panel
+        axes[
+            i
+        ].legend()  # Muestra la leyenda del grafico
+        axes[i].grid(True)  # Muestra la cuadrícula de fondo
 
-    plt.xlabel("Fecha") # Pone la etiqueta "Fecha" en el eje de las X
-    plt.tight_layout() # Ajusto los titulos 
-    
+    plt.xlabel("Fecha")  # Pone la etiqueta "Fecha" en el eje de las X
+    plt.tight_layout()  # Ajusto los titulos
+
     # Guardamos el resultado como pide el PDF
     plt.savefig("weather_comparison.png")
     print("📊 Gráfico comparativo guardado como 'weather_comparison.png'")
     plt.show()
 
+
 def main():
     # Diccionario para guardar los resultados finales de cada ciudad
     all_cities_data = {}
-    
+
     # Iteramos sobre las ciudades que definimos en COORDINATES
     for city in COORDINATES.keys():
         print(f"\n--- Iniciando proceso para: {city} ---")
-        
-        # Llamada a la API 
+
+        # Llamada a la API
         raw_data = get_data_meteo_api(city)
-        
+
         if raw_data:
-            # Procesamiento inicial a DataFrame 
+            # Procesamiento inicial a DataFrame
             df_daily = process_meteo_data(raw_data, city)
-            
+
             # Reducción de resolución a mensual
             df_monthly = resample_to_monthly(df_daily)
-            
+
             # Guardamos el DataFrame en nuestro diccionario
             all_cities_data[city] = df_monthly
             print(f"Datos de {city} listos para graficar.")
@@ -117,6 +124,7 @@ def main():
         plot_meteo_data(all_cities_data)
     else:
         print("No se obtuvieron datos de ninguna ciudad. Revisa la conexión.")
+
 
 if __name__ == "__main__":
     main()
