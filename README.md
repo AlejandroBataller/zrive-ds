@@ -72,3 +72,20 @@ Los datos encontraréis disponibles en s3 son:
 
 La primera vez que vayais a trabajar con los datos, debeis descargarlos utilizando python `boto3` o `AWS CLI` y a partir de ahí guardarlos en local para evitar tener que descargarlos cada vez (IMPORTANTE: Se considera una buena práctica no añadir datos a vuestros repositorios de código ya que eso haría el repositorio muy pesado y todas las operaciones de version control muy lentas.)
 
+## Módulo 4: Proyecto de notificaciones Push
+
+Este repositorio contiene la solución completa para el Módulo 4, donde se ha realizado la transición de notebooks de experimentación a scripts de producción, siguiendo las buenas prácticas en MLOps.
+
+### Estructura del Módulo 4
+- `notebooks/04_Exploratory_Phase.ipynb`: **Laboratorio de Experimentación.** Estudio detallado, comparativa de modelos y calibración.
+- `src/module_4/`: **Fase de Producción.**
+  - `training.py`: Script modular para entrenamiento.
+  - `inference.py`: Clase `PushModelInference` para inferencia encapsulada.
+
+### Instrucciones de Ejecución
+
+Para ejecutar los scripts de producción, asegúrate de estar en el directorio raíz:
+
+**Entrenamiento:**
+```bash
+python src/module_4/training.py
